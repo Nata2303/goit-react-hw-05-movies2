@@ -1,16 +1,16 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './Home';
-import Movies from './Movies';
-import MovieDetails from './MovieDetails';
-import Cast from './Cast';
-import Reviews from './Reviews';
+import { Routes, Route } from 'react-router-dom';
+import Home from './Home/Home';
+import Movies from './Movies/Movies';
+import MovieDetails from './MovieDetails/MovieDetails';
+import Cast from './CAST/Cast';
+import Reviews from './Reviews/Reviews';
 import { Link } from 'react-router-dom';
-import css from './home.module.css'
+import css from './Home/home.module.css';
 
 const App = () => {
   return (
-    <Router>
+    <div>
       <nav className={css.item}>
         {/* Посилання на сторінку Home */}
         <Link className={css.titel} to="/">
@@ -32,7 +32,7 @@ const App = () => {
           <Route path="*" element={<Home />} />
         </Routes>
       </Suspense>
-    </Router>
+    </div>
   );
 };
 

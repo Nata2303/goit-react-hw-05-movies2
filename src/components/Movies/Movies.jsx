@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Api from './Api';
-import css from './movies.module.css'
+import Api from '../../Api';
+import css from './movies.module.css';
 
 const Movies = () => {
   const [searchQuery, setSearchQuery] = useState('');

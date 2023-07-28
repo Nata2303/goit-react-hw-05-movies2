@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Api from './Api';
-import Cast from './Cast';
-import Reviews from './Reviews';
+import Api from '../../Api';
+import Cast from '../CAST/Cast';
+import Reviews from '../Reviews/Reviews';
 import css from './movieDetails.module.css';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
   const [cast, setCast] = useState([]);
-    const [reviews, setReviews] = useState([]);
-    const [isCastVisible, setIsCastVisible] = useState(false);
-    const [isReviewsVisible, setIsReviewsVisible] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [isCastVisible, setIsCastVisible] = useState(false);
+  const [isReviewsVisible, setIsReviewsVisible] = useState(false);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -37,20 +37,20 @@ const MovieDetails = () => {
   if (!movieDetails) {
     return <div>Loading...</div>;
   }
-    
-    const { title, vote_average, overview, genres } = movieDetails;
-    const userScorePercentage = (vote_average * 10).toLocaleString(undefined, {
+
+  const { title, vote_average, overview, genres } = movieDetails;
+  const userScorePercentage = (vote_average * 10).toLocaleString(undefined, {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
-    });
-    
-    const handleCastClick = () => {
+  });
+
+  const handleCastClick = () => {
     setIsCastVisible(!isCastVisible);
   };
 
-const handleReviewsClick = () => {
-  setIsReviewsVisible(!isReviewsVisible);
-};
+  const handleReviewsClick = () => {
+    setIsReviewsVisible(!isReviewsVisible);
+  };
 
   return (
     <div>
