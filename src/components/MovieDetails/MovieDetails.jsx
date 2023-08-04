@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, Outlet, Link } from 'react-router-dom';
 import Api from '../../Api';
-import Cast from '../CAST/Cast';
-import Reviews from '../Reviews/Reviews';
 import css from './movieDetails.module.css';
 
 const MovieDetails = () => {
+  const navigate = useNavigate();
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
-  const [cast, setCast] = useState([]);
-  const [reviews, setReviews] = useState([]);
-  const [isCastVisible, setIsCastVisible] = useState(false);
-  const [isReviewsVisible, setIsReviewsVisible] = useState(false);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -19,19 +14,7 @@ const MovieDetails = () => {
       setMovieDetails(data);
     };
 
-    const fetchMovieCredits = async () => {
-      const creditsData = await Api.getMovieCredits(movieId);
-      setCast(creditsData.cast);
-    };
-
-    const fetchMovieReviews = async () => {
-      const reviewsData = await Api.getMovieReviews(movieId);
-      setReviews(reviewsData.results);
-    };
-
     fetchMovieDetails();
-    fetchMovieCredits();
-    fetchMovieReviews();
   }, [movieId]);
 
   if (!movieDetails) {
@@ -44,12 +27,8 @@ const MovieDetails = () => {
     maximumFractionDigits: 1,
   });
 
-  const handleCastClick = () => {
-    setIsCastVisible(!isCastVisible);
-  };
-
-  const handleReviewsClick = () => {
-    setIsReviewsVisible(!isReviewsVisible);
+  const handleGoBack = () => {
+    navigate(-1);
   };
 
   return (
@@ -65,15 +44,19 @@ const MovieDetails = () => {
           <p className={css.userscore}>User Score: {userScorePercentage}%</p>
           <p className={css.overview}>Overview: {overview}</p>
           <p>Genres: {genres.map(genre => genre.name).join(', ')}</p>
+          <button className={css.goBackButton} onClick={handleGoBack}>
+            Go back
+          </button>
         </div>
       </div>
-      {/* Collapsible Cast section */}
-      <h3 onClick={handleCastClick}>Cast</h3>
-      {isCastVisible && <Cast cast={cast} />}
-
-      {/* Collapsible Reviews section */}
-      <h3 onClick={handleReviewsClick}>Reviews</h3>
-      {isReviewsVisible && <Reviews reviews={reviews} />}
+      <Link to={`/movies/${movieId}/cast`} className={css.link}>
+        Cast
+      </Link>
+      <Link to={`/movies/${movieId}/reviews`} className={css.link}>
+        Reviews
+      </Link>
+      {/* Outlet для дочірніх маршрутів Cast та Reviews */}
+      <Outlet />
     </div>
   );
 };

@@ -1,12 +1,12 @@
 import React, { Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Home from './Home/Home';
-import Movies from './Movies/Movies';
-import MovieDetails from './MovieDetails/MovieDetails';
-import Cast from './CAST/Cast';
-import Reviews from './Reviews/Reviews';
-import { Link } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import css from './Home/home.module.css';
+
+const Home = React.lazy(() => import('./Home/Home'));
+const Movies = React.lazy(() => import('./Movies/Movies'));
+const MovieDetails = React.lazy(() => import('./MovieDetails/MovieDetails'));
+const Cast = React.lazy(() => import('./Cast/Cast'));
+const Reviews = React.lazy(() => import('./Reviews/Reviews'));
 
 const App = () => {
   return (
@@ -25,9 +25,10 @@ const App = () => {
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route path="/movies" element={<Movies />} />
-          <Route path="/movies/:movieId" element={<MovieDetails />} />
-          <Route path="/movies/:movieId/cast" element={<Cast />} />
-          <Route path="/movies/:movieId/reviews" element={<Reviews />} />
+          <Route path="/movies/:movieId" element={<MovieDetails />}>
+            <Route path="/movies/:movieId/cast" element={<Cast />} />
+            <Route path="/movies/:movieId/reviews" element={<Reviews />} />
+          </Route>
           {/* Redirect to Home if route is not found */}
           <Route path="*" element={<Home />} />
         </Routes>

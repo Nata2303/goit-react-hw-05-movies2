@@ -8,8 +8,13 @@ const Reviews = () => {
 
   useEffect(() => {
     const fetchMovieReviews = async () => {
-      const data = await Api.getMovieReviews(movieId);
-      setReviews(data.results);
+      try {
+        const reviewsData = await Api.getMovieReviews(movieId);
+        setReviews(reviewsData.results);
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+        setReviews([]);
+      }
     };
 
     fetchMovieReviews();

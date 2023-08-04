@@ -1,23 +1,37 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Api from '../../Api';
 import css from './movies.module.css';
 
 const Movies = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
-  const handleSearchSubmit = async event => {
-    event.preventDefault();
-    try {
-      const data = await Api.searchMovies(searchQuery);
-      setSearchResults(data.results);
-    } catch (error) {
-      console.error('Error searching movies:', error);
-      setSearchResults([]);
-    }
-  };
+  const handleSearchSubmit = useCallback(
+    async event => {
+      event.preventDefault();
+      try {
+        const data = await Api.searchMovies(searchQuery);
+        setSearchResults(data.results);
+        // Обновление URL с поисковым запросом
+        navigate(`?query=${searchQuery}`);
+      } catch (error) {
+        console.error('Error searching movies:', error);
+        setSearchResults([]);
+      }
+    },
+    [searchQuery, navigate]
+  );
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const query = queryParams.get('query');
+    if (query) {
+      setSearchQuery(query);
+      handleSearchSubmit();
+    }
+  }, [handleSearchSubmit]);
   return (
     <div>
       <h1>Search Movies</h1>
